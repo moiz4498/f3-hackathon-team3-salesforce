@@ -127,8 +127,8 @@ const response = await salesforceNode.execute({
 
 ## Integration Points
 - Salesforce REST API
-  - Lead creation endpoint: `/services/data/v58.0/sobjects/Lead`
-  - Case creation endpoint: `/services/data/v58.0/sobjects/Case`
+  - Lead creation endpoint: `/services/apexrest/api/v1/lead`
+  - Case creation endpoint: `/services/apexrest/api/v1/case`
   - OAuth endpoints for authentication
 - AgentDock MCP Server
   - Agent registration
@@ -145,5 +145,3 @@ The agent uses a structured logging system with the following levels:
 ## Docker Support
 The agent is fully Docker-compatible and works seamlessly within AgentDock's containerized architecture.
 
-## Contributing
-Please follow the standard pull request process and ensure all tests pass before submitting changes.
