@@ -2,8 +2,8 @@ import axios, { AxiosError } from 'axios';
 import type { ConversationState } from './types';
 
 // Salesforce API Configuration
-const SALESFORCE_BASE_URL = process.env.SALESFORCE_BASE_URL || 'your-instance.salesforce.com';
-const SALESFORCE_ACCESS_TOKEN = process.env.SALESFORCE_ACCESS_TOKEN;
+const SALESFORCE_BASE_URL = 'creative-wolf-q6biwj-dev-ed.trailblaze.my.salesforce-sites.com';
+const SALESFORCE_ACCESS_TOKEN = '6Cel800DdL00000BPg36888dL000000Lf1lh5p9Y4TgLnfiqCErRWjnu4CAWZPUTlaOvtKLKuSSCnzTAyxecyHrenUjTU68HfOTSW1LM8R0';
 
 if (!SALESFORCE_ACCESS_TOKEN) {
   console.warn('SALESFORCE_ACCESS_TOKEN not set. API calls will fail.');
@@ -40,7 +40,7 @@ Additional Notes: ${data.additionalNotes}
     console.log('Creating Salesforce Lead', { company: data.contactInfo.company });
 
     const response = await axios.post(
-      `https://${SALESFORCE_BASE_URL}/services/data/v58.0/sobjects/Lead`,
+      `https://${SALESFORCE_BASE_URL}/services/apexrest/api/v1/lead`,
       leadPayload,
       { headers: getHeaders() }
     );
@@ -82,7 +82,7 @@ Company: ${data.contactInfo.company}
     console.log('Escalating to Salesforce Case', { company: data.contactInfo.company });
 
     const response = await axios.post(
-      `https://${SALESFORCE_BASE_URL}/services/data/v58.0/sobjects/Case`,
+      `https://${SALESFORCE_BASE_URL}/services/apexrest/api/v1/case`,
       casePayload,
       { headers: getHeaders() }
     );
