@@ -2,13 +2,15 @@
   "version": "1.0",
   "agentId": "salesforce-agent",
   "name": "Salesforce Agent",
-  "description": "A minimal agent using OpenAI and the Salesforce tool.",
-  "tags": ["salesforce", "crm", "tools"],
+  "description": "A professional sales agent that qualifies leads for our Salesforce implementation services.",
+  "tags": ["salesforce", "crm", "sales", "lead-qualification"],
   "priority": 1,
   "personality": [
-    "You are a Salesforce assistant. Your job is to assist users with Salesforce-related queries.",
-    "You are efficient, professional, and focused on providing accurate information.",
-    "Use the Salesforce tool to process user inputs and return relevant results."
+    "You are a professional sales representative for our company, a leading Salesforce solution provider.",
+    "Your primary goal is to engage potential clients, understand their needs, and convince them that we are the best choice for their Salesforce implementation.",
+    "You are confident but not pushy, emphasizing our expertise, successful track record, and comprehensive Salesforce solutions.",
+    "You naturally guide conversations towards qualifying leads while maintaining a professional and helpful demeanor.",
+    "You highlight our company's strengths: expert team, proven track record, end-to-end Salesforce solutions, and commitment to client success."
   ],
   "nodes": [
     "llm.groq",
@@ -20,59 +22,56 @@
       "temperature": 0.7,
       "maxTokens": 4096,
       "useCustomApiKey": false
+    },
+    "salesforce_node": {
+      "useLLM": true,
+      "llmProvider": "llm.groq",
+      "stateManagement": {
+        "persist": true,
+        "type": "redis",
+        "ttlSeconds": 86400
+      }
     }
   },
   "orchestration": {
-    "description": "Basic Salesforce workflows",
+    "description": "Lead qualification workflow for Salesforce implementation services",
     "steps": [
       {
-        "name": "Preprocess Input",
-        "description": "Preprocess user input to ensure it is well-structured for the Salesforce tool",
-        "isDefault": false,
-        "sequence": ["llm.groq"],
-        "availableTools": {
-          "allowed": ["llm.groq"]
-        },
-        "return": "preprocessed_input"
-      },
-      {
-        "name": "Salesforce Query",
-        "description": "Process user queries using the Salesforce tool",
+        "name": "Salesforce Conversation",
+        "description": "Handle the conversation flow with potential clients",
         "isDefault": true,
         "sequence": ["salesforce_node"],
         "availableTools": {
-          "allowed": ["salesforce_node"]
+          "allowed": ["salesforce_node", "llm.groq"]
         },
-        "return": "tool_result"
-      },
-      {
-        "name": "Postprocess Output",
-        "description": "Postprocess the Salesforce tool's output for user readability and embed the query result",
-        "isDefault": false,
-        "sequence": ["llm.groq"],
-        "availableTools": {
-          "allowed": ["llm.groq"]
-        },
-        "return": "final_output",
         "inputs": {
-          "queryResult": "tool_result"
+          "llmContext": {
+            "provider": "llm.groq",
+            "model": "llama3-8b-8192"
+          }
+        },
+        "stateManagement": {
+          "persist": true,
+          "scope": "conversation"
         }
       }
     ]
   },
   "options": {
-    "maxSteps": 3
+    "maxSteps": 1,
+    "persistState": true
   },  
   "chatSettings": {
     "historyPolicy": "lastN",
     "historyLength": 10,
+    "persistHistory": true,
     "initialMessages": [
-      "Hello! I am your Salesforce assistant. How can I help you today?"
+      "Hello! I'm excited to discuss how our expert team can help transform your business with Salesforce. We specialize in delivering custom Salesforce solutions that drive real results. How can we help you today?"
     ],
     "chatPrompts": [
-      "Can you help me with my Salesforce account?",
-      "What is the status of my Salesforce leads?",
-      "How do I update a contact in Salesforce?"
+      "Tell me about your current business challenges",
+      "What Salesforce capabilities are you looking to implement?",
+      "Would you like to hear about our successful Salesforce implementations?"
     ]
   }
 }
